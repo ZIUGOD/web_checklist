@@ -5,7 +5,13 @@ function main() {
   const sendbutton = document.getElementById("sendbutton");
   let lists = [];
   let listname;
+  let loaded = JSON.parse(localStorage.getItem("listas"))
 
+  if (loaded) {
+    for (const el of loaded) {
+      addlist(el)
+    }
+  }
 
   function addlist(name) {
     const element = document.createElement("h1")
@@ -13,6 +19,8 @@ function main() {
     element.id = name
 
     document.querySelector("body").append(element)
+    lists.push(name)
+    localStorage.setItem("listas", JSON.stringify(lists))
   }
 
   sendbutton.onclick = () => {
