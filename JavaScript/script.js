@@ -10,11 +10,12 @@ function main() {
   function addlist(name) {
     const element = document.createElement("h1")
     element.innerHTML = name
+    element.id = name
 
     document.querySelector("body").append(element)
   }
 
-  sendbutton.onclick = function() {
+  sendbutton.onclick = () => {
     listname = document.getElementById("inputlistname").value
     addlist(listname)
   }
