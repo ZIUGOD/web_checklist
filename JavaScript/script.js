@@ -35,6 +35,10 @@ function main() {
         }
         taskbutton.onclick = () => {
             const taskname = prompt("Nome da nova tarefa?")
+            if (!taskname) {
+                alert("Nome de tarefa inválido.")
+                return null
+            }
             list.tasks.push(taskname)
             addtask(taskname,listul)
         }
