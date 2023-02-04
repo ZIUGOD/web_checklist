@@ -1,49 +1,53 @@
 window.addEventListener("DOMContentLoaded", main)
 
-
 function main() {
     const sendbutton = document.getElementById("sendbutton")
-    let lists = [];
-    let listname;
-    let loaded = JSON.parse(localStorage.getItem("listas"))
+    let listname
+    let lists = []
+    let load = JSON.parse(localStorage.getItem("listas"))
 
-
-
-    if (loaded) {
-        for (const el of loaded) {
-            addlist(el)
+    if (load) {
+        for (const el of load) {
+            addlist(el.name,el.tasks)
+            for (const tsk of el.tasks) {
+                addtask(tsk,document.getElementById(el.name))
+            }
         }
-    }
-
-    function addlist(name) {
-        const taskbutton = document.createElement("button")
-        taskbutton.innerHTML = "Adicionar Tarefa"
-        const element = document.createElement("h1")
-        element.innerHTML = name
-        element.id = name
-        taskbutton.id = name + " button"
-        element.append(taskbutton)
-
-        document.querySelector("body").append(element)
-        lists.push(name)
-        localStorage.setItem("listas", JSON.stringify(lists))
-        sendbutton.disabled = true
-    }
-
-    sendbutton.disabled = true
-
-    document.querySelector("#inputlistname").onkeyup = () => {
-        sendbutton.disabled = document.querySelector("#inputlistname").value === ""
     }
 
     sendbutton.onclick = () => {
         listname = document.getElementById("inputlistname").value
-        if (listname !== "") {
-            addlist(listname)
-            document.querySelector("#inputlistname").value = ""
-        } else {
-            alert("Invalid list name {null}.")
-            sendbutton.disabled = true
-        }
+        addlist(listname,[])
     }
+    function addlist(name,tasks) {
+        const taskbutton = document.createElement("button")
+        taskbutton.innerHTML = "Adicionar tarefa"
+        taskbutton.id = `${name}btn`
+        const listul = document.createElement("ul")
+        listul.id = name
+        const listelement = document.createElement("h1")
+        listelement.innerHTML = name
+        listelement.append(taskbutton)
+        listelement.append(listul)
+        const list = {
+            name: name,
+            tasks: tasks
+        }
+        taskbutton.onclick = () => {
+            const taskname = prompt("Nome da nova tarefa?")
+            list.tasks.push(taskname)
+            addtask(taskname,listul)
+        }
+        lists.push(list)
+        document.querySelector("body").append(listelement)
+        localStorage.setItem("listas",JSON.stringify(lists))
+    }
+
+    function addtask(name,ul) {
+        const task = document.createElement("li")
+        task.innerHTML = name
+        ul.append(task)
+        localStorage.setItem("listas",JSON.stringify(lists))
+    }
+
 }
