@@ -14,7 +14,6 @@ function main() {
             }
         }
     }
-
     sendbutton.onclick = () => {
         listname = document.getElementById("inputlistname").value
         addlist(listname,[])
@@ -25,6 +24,7 @@ function main() {
         taskbutton.id = `${name}btn`
         const listul = document.createElement("ul")
         listul.id = name
+        listul.className = "list-group"
         const listelement = document.createElement("h1")
         listelement.innerHTML = name
         listelement.append(taskbutton)
@@ -45,9 +45,26 @@ function main() {
 
     function addtask(name,ul) {
         const task = document.createElement("li")
-        task.innerHTML = name
+        task.className = "list-group-item"
+        const taskbox = document.createElement("input")
+        taskbox.type = "checkbox"
+        taskbox.className = "form-check-input me-1"
+        taskbox.id = `${name}checkbox`
+        const tasklabel = document.createElement("label")
+        tasklabel.className = "form-check-label"
+        tasklabel.setAttribute("for","firstcheckbox")
+        tasklabel.innerHTML = name
+        task.append(taskbox)
+        task.append(tasklabel)
         ul.append(task)
         localStorage.setItem("listas",JSON.stringify(lists))
+    }
+      sendbutton.disabled = true
+
+    document.querySelector("#inputlistname").onkeyup = togglecheck
+    document.querySelector("#inputlistname").onkeydown = togglecheck
+    function togglecheck() {
+        sendbutton.disabled = document.querySelector("#inputlistname").value === ""
     }
 
 }
