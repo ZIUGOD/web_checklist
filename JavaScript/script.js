@@ -56,7 +56,7 @@ function main() {
         taskbox.id = `${name}checkbox`
         const tasklabel = document.createElement("label")
         tasklabel.className = "form-check-label"
-        tasklabel.setAttribute("for","firstcheckbox")
+        tasklabel.setAttribute("for",taskbox.id)
         tasklabel.innerHTML = name
         task.append(taskbox)
         task.append(tasklabel)
