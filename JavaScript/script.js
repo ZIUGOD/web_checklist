@@ -26,10 +26,10 @@ function main() {
         listname = document.getElementById("inputlistname").value;
         if (lists.find((list) => list.name === listname)) {
             alert("Uma lista com esse nome já existe. Tente outro nome.");
-            document.getElementById("inputlistname").value = ""
+            document.getElementById("inputlistname").value = "";
             return;
         }
-        document.getElementById("inputlistname").value = ""
+        document.getElementById("inputlistname").value = "";
         addlist(listname, []);
     };
     function addlist(name, tasks) {
@@ -86,6 +86,13 @@ function main() {
         tasklabel.className = "form-check-label";
         tasklabel.setAttribute("for", taskbox.id);
         tasklabel.innerHTML = name;
+        taskbox.addEventListener("change", function () {
+            if (taskbox.checked) {
+                tasklabel.style.textDecoration = "line-through";
+            } else {
+                tasklabel.style.textDecoration = "none";
+            }
+        });
         task.append(taskbox);
         task.append(tasklabel);
         ul.append(task);
