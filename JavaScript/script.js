@@ -1,12 +1,13 @@
 window.addEventListener("DOMContentLoaded", main);
 
 function main() {
+    document.getElementById("inputlistname").focus();
     const sendbutton = document.getElementById("sendbutton");
     let listname;
     let lists = [];
     let load = JSON.parse(localStorage.getItem("listas"));
     const deleteAllButton = document.createElement("button");
-    deleteAllButton.innerHTML = "Delete All";
+    deleteAllButton.innerHTML = "Deletar tudo";
     deleteAllButton.className = "btn btn-outline-danger";
     deleteAllButton.onclick = () => {
         lists = [];
@@ -18,11 +19,12 @@ function main() {
         for (const el of load) {
             addlist(el.name, el.tasks);
             for (const tsk of el.tasks) {
-                addtask(tsk, document.getElementById(el.name));
+                addtask(tsk.name, tsk ,document.getElementById(el.name));
             }
         }
     }
     sendbutton.onclick = () => {
+        document.getElementById("inputlistname").focus();
         listname = document.getElementById("inputlistname").value;
         if (lists.find((list) => list.name === listname)) {
             alert("Uma lista com esse nome já existe. Tente outro nome.");
@@ -62,8 +64,13 @@ function main() {
                 alert("Nome de tarefa inválido.");
                 return null;
             }
-            list.tasks.push(taskname);
-            addtask(taskname, listul);
+            const taskobj = {
+                name: taskname,
+                checked: false,
+                textDecoration: "none",
+            }
+            list.tasks.push(taskobj);
+            addtask(taskname, taskobj,listul);
         };
         deletebutton.onclick = () => {
             listelement.remove();
@@ -75,21 +82,31 @@ function main() {
         document.querySelector("body").append(listelement);
         localStorage.setItem("listas", JSON.stringify(lists));
     }
-    function addtask(name, ul) {
+    function addtask(name,taskobj,ul) {
         const task = document.createElement("li");
         task.className = "list-group-item";
         const taskbox = document.createElement("input");
         taskbox.type = "checkbox";
         taskbox.className = "form-check-input me-1";
         taskbox.id = `${name}checkbox`;
+        if (taskobj.checked) {
+            taskbox.checked = true
+        }
         const tasklabel = document.createElement("label");
         tasklabel.className = "form-check-label";
         tasklabel.setAttribute("for", taskbox.id);
+        if (taskobj.checked) {
+            tasklabel.style.textDecoration = "line-through"
+        }
         tasklabel.innerHTML = name;
         taskbox.addEventListener("change", function () {
             if (taskbox.checked) {
+                taskobj.checked = true
+                localStorage.setItem("listas", JSON.stringify(lists))
                 tasklabel.style.textDecoration = "line-through";
             } else {
+                taskobj.checked = false
+                localStorage.setItem("listas", JSON.stringify(lists))
                 tasklabel.style.textDecoration = "none";
             }
         });
