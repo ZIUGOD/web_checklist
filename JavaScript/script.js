@@ -12,7 +12,7 @@ function main() {
     deleteAllButton.onclick = () => {
         lists = [];
         localStorage.removeItem("listas");
-        document.querySelectorAll("h1").forEach((h1) => h1.remove());
+        document.querySelectorAll(".lists").forEach((lists) => lists.remove());
     };
     document.querySelector("#sendbutton").after(deleteAllButton);
     if (load) {
@@ -29,27 +29,33 @@ function main() {
         if (lists.find((list) => list.name === listname)) {
             alert("Uma lista com esse nome já existe. Tente outro nome.");
             document.getElementById("inputlistname").value = "";
+            togglecheck()
             return;
         }
         document.getElementById("inputlistname").value = "";
         addlist(listname, []);
     };
     function addlist(name, tasks) {
+        togglecheck()
         const taskbutton = document.createElement("button");
         taskbutton.innerHTML = "Adicionar tarefa";
         taskbutton.className = "btn btn-outline-primary";
-        taskbutton.id = `${name}btn`;
+        taskbutton.id = "taskbtn";
         const deletebutton = document.createElement("button");
         deletebutton.className = "btn btn-outline-danger";
         deletebutton.innerHTML = "Deletar lista";
+        deletebutton.id = "taskdelbtn";
         const listul = document.createElement("ul");
         listul.id = name;
         listul.className = "list-group";
-        const listelement = document.createElement("h1");
-        listelement.innerHTML = name;
-        listelement.append(taskbutton);
-        listelement.append(deletebutton);
-        listelement.append(listul);
+        const listn = document.createElement("h1");
+        listn.innerHTML = name;
+        listn.append(taskbutton);
+        listn.append(deletebutton);
+        listn.append(listul);
+        const entirelist = document.createElement("div")
+        entirelist.className = "lists"
+        entirelist.append(listn)
         const list = {
             name: name,
             tasks: tasks,
@@ -73,13 +79,13 @@ function main() {
             addtask(taskname, taskobj,listul);
         };
         deletebutton.onclick = () => {
-            listelement.remove();
+            entirelist.remove();
             const index = lists.findIndex((list) => list.name === name);
             lists.splice(index, 1);
             localStorage.setItem("listas", JSON.stringify(lists));
         };
         lists.push(list);
-        document.querySelector("body").append(listelement);
+        document.querySelector("#listbox").append(entirelist);
         localStorage.setItem("listas", JSON.stringify(lists));
     }
     function addtask(name,taskobj,ul) {
@@ -97,6 +103,7 @@ function main() {
         tasklabel.setAttribute("for", taskbox.id);
         if (taskobj.checked) {
             tasklabel.style.textDecoration = "line-through"
+            tasklabel.style.color = "black"
         }
         tasklabel.innerHTML = name;
         taskbox.addEventListener("change", function () {
@@ -104,10 +111,12 @@ function main() {
                 taskobj.checked = true
                 localStorage.setItem("listas", JSON.stringify(lists))
                 tasklabel.style.textDecoration = "line-through";
+                tasklabel.style.color = "black"
             } else {
                 taskobj.checked = false
                 localStorage.setItem("listas", JSON.stringify(lists))
                 tasklabel.style.textDecoration = "none";
+                tasklabel.style.color = "white"
             }
         });
         task.append(taskbox);
@@ -121,5 +130,10 @@ function main() {
     function togglecheck() {
         sendbutton.disabled =
             document.querySelector("#inputlistname").value === "";
+        if (!sendbutton.disabled) {
+            sendbutton.className = "btn btn-primary"
+        } else {
+            sendbutton.className = "btn btn-outline-primary"
+        }
     }
 }

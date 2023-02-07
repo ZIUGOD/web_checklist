@@ -1,0 +1,45 @@
+body {
+    background-color: black;
+}
+
+label {
+    color: white;
+}
+
+h1 {
+    font-size: 30px;
+    padding: 20px;
+    color: white;
+}
+
+.form-control:focus , .form-control {
+    background-color: green;
+    color: white;
+    border-color: blue;
+}
+
+.form-control::placeholder {
+    color: white;
+}
+
+.list-group-item {
+    background-image: linear-gradient(to right,green,black);
+    border-color: blue;
+    width: 500px;
+    font-size: 20px;
+}
+
+.form-check-input:checked {
+    background-color: black;
+}
+
+.lists {
+    border-radius: 20px;
+    border: dashed blue 2px;
+    width: 550px;
+}
+
+#listbox {
+    display: flex;
+    flex-wrap: wrap;
+}
